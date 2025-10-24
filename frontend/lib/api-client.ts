@@ -8,8 +8,8 @@ class ApiClient {
   private baseUrl: string
 
   constructor() {
-    // Detectar si estamos en desarrollo o producción
-    const isDevelopment = process.env.NODE_ENV === 'development'
+    // Siempre usar localhost en desarrollo, independientemente del NODE_ENV
+    const isDevelopment = process.env.NODE_ENV === 'development' || process.env.NODE_ENV === undefined
     
     if (isDevelopment) {
       this.baseUrl = "http://localhost:3001"
