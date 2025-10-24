@@ -10,7 +10,7 @@ const nextConfig = {
     unoptimized: true,
   },
   env: {
-    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || 'https://ascangt.org',
+    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || 'https://ascangt.org:3001',
   },
   async rewrites() {
     // Solo hacer proxy en desarrollo

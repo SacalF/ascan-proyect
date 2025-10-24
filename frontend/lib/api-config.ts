@@ -2,7 +2,7 @@
 const isDevelopment = process.env.NODE_ENV === 'development'
 const API_BASE_URL = isDevelopment 
   ? 'http://localhost:3001' 
-  : (process.env.NEXT_PUBLIC_API_URL || 'https://ascangt.org')
+  : (process.env.NEXT_PUBLIC_API_URL || 'https://ascangt.org:3001')
 
 // Log para debugging
 console.log('🔧 API Config:', {
