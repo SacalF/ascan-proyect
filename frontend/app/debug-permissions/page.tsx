@@ -1,3 +1,5 @@
+"use client"
+
 import React from 'react'
 import { useAuth } from '@/hooks/use-auth'
 import { usePermissions } from '@/hooks/use-permissions'
