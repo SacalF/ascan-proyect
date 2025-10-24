@@ -8,8 +8,19 @@ class ApiClient {
   private baseUrl: string
 
   constructor() {
-    this.baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001"
+    // Detectar si estamos en desarrollo o producción
+    const isDevelopment = process.env.NODE_ENV === 'development'
+    
+    if (isDevelopment) {
+      this.baseUrl = "http://localhost:3001"
+    } else {
+      // En producción, usar la URL del backend desplegado
+      // REEMPLAZA 'https://tu-backend-url.com' con tu URL real
+      this.baseUrl = process.env.NEXT_PUBLIC_API_URL || 'https://ascangt.org/'
+    }
+    
     console.log(`[API] Base URL: ${this.baseUrl}`)
+    console.log(`[API] Environment: ${process.env.NODE_ENV}`)
     console.log(`[API] Environment NEXT_PUBLIC_API_URL: ${process.env.NEXT_PUBLIC_API_URL}`)
   }
 
