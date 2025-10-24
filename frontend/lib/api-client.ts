@@ -15,8 +15,7 @@ class ApiClient {
       this.baseUrl = "http://localhost:3001"
     } else {
       // En producción, usar la URL del backend desplegado
-      // REEMPLAZA 'https://tu-backend-url.com' con tu URL real
-      this.baseUrl = process.env.NEXT_PUBLIC_API_URL || 'https://ascangt.org/'
+      this.baseUrl = process.env.NEXT_PUBLIC_API_URL || 'https://ascangt.org'
     }
     
     console.log(`[API] Base URL: ${this.baseUrl}`)

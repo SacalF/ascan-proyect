@@ -10,15 +10,20 @@ const nextConfig = {
     unoptimized: true,
   },
   env: {
-    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000',
+    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || 'https://ascangt.org',
   },
   async rewrites() {
-    return [
-      {
-        source: '/api/:path*',
-        destination: 'http://localhost:3001/api/:path*',
-      },
-    ]
+    // Solo hacer proxy en desarrollo
+    if (process.env.NODE_ENV === 'development') {
+      return [
+        {
+          source: '/api/:path*',
+          destination: 'http://localhost:3001/api/:path*',
+        },
+      ]
+    }
+    // En producción, no hacer proxy - las peticiones van directamente al backend
+    return []
   },
 }
 
