@@ -58,13 +58,26 @@ export default function DashboardPageClient() {
 
   const cargarUsuario = async () => {
     try {
-      const response = await fetch("/api/auth/me")
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'
+      const response = await fetch(`${apiUrl}/api/auth/me`, {
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      })
+      
+      if (!response.ok) {
+        throw new Error(`Error de autenticación: ${response.status}`)
+      }
+      
       const data = await response.json()
       if (data && data.user) {
         setUser(data.user)
+        console.log('✅ Usuario cargado:', data.user.nombres)
       }
     } catch (error) {
-      console.error("Error cargando usuario:", error)
+      console.error("❌ Error cargando usuario:", error)
+      // No establecer error aquí para no bloquear el dashboard
     }
   }
 
@@ -73,22 +86,52 @@ export default function DashboardPageClient() {
       setLoading(true)
       setError(null)
 
-      // Cargar estadísticas generales
+      // Determinar la URL base de la API
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'
+      console.log('🔗 Usando API URL:', apiUrl)
+
+      // Cargar estadísticas generales con mejor manejo de errores
       const [pacientesResponse, citasResponse, laboratoriosResponse] = await Promise.all([
-        fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}/api/pacientes`, {
-          credentials: 'include'
+        fetch(`${apiUrl}/api/pacientes`, {
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          }
         }),
-        fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}/api/citas`, {
-          credentials: 'include'
+        fetch(`${apiUrl}/api/citas`, {
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          }
         }),
-        fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}/api/laboratorio`, {
-          credentials: 'include'
+        fetch(`${apiUrl}/api/laboratorio`, {
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          }
         }),
       ])
+
+      // Verificar si las respuestas son exitosas
+      if (!pacientesResponse.ok) {
+        throw new Error(`Error al cargar pacientes: ${pacientesResponse.status} ${pacientesResponse.statusText}`)
+      }
+      if (!citasResponse.ok) {
+        throw new Error(`Error al cargar citas: ${citasResponse.status} ${citasResponse.statusText}`)
+      }
+      if (!laboratoriosResponse.ok) {
+        throw new Error(`Error al cargar laboratorios: ${laboratoriosResponse.status} ${laboratoriosResponse.statusText}`)
+      }
 
       const pacientesData = await pacientesResponse.json()
       const citasData = await citasResponse.json()
       const laboratoriosData = await laboratoriosResponse.json()
+
+      console.log('📊 Respuestas de la API:', {
+        pacientes: pacientesData,
+        citas: citasData,
+        laboratorios: laboratoriosData
+      })
 
       // Procesar datos
       const pacientes = Array.isArray(pacientesData.pacientes) ? pacientesData.pacientes : []
@@ -137,8 +180,28 @@ export default function DashboardPageClient() {
       })
 
     } catch (error) {
-      console.error("Error cargando datos del dashboard:", error)
-      setError("Error al cargar los datos del dashboard")
+      console.error("❌ Error cargando datos del dashboard:", error)
+      
+      // Determinar el tipo de error y mostrar mensaje específico
+      let errorMessage = "Error al cargar los datos del dashboard"
+      
+      if (error instanceof TypeError && error.message.includes('fetch')) {
+        errorMessage = "Error de conexión: No se puede conectar con el servidor. Verifica que el backend esté ejecutándose."
+      } else if (error instanceof Error) {
+        if (error.message.includes('401')) {
+          errorMessage = "Error de autenticación: Tu sesión ha expirado. Por favor, inicia sesión nuevamente."
+        } else if (error.message.includes('403')) {
+          errorMessage = "Error de permisos: No tienes acceso a esta información."
+        } else if (error.message.includes('404')) {
+          errorMessage = "Error: El servicio no está disponible. Contacta al administrador."
+        } else if (error.message.includes('500')) {
+          errorMessage = "Error del servidor: Hay un problema con el backend. Contacta al administrador."
+        } else {
+          errorMessage = `Error: ${error.message}`
+        }
+      }
+      
+      setError(errorMessage)
     } finally {
       setLoading(false)
     }
@@ -215,14 +278,51 @@ export default function DashboardPageClient() {
   if (error) {
     return (
       <div className="p-6 space-y-6">
-        <div className="flex justify-center items-center h-64">
-          <div className="text-center">
-            <div className="bg-red-100 p-4 rounded-lg mb-4">
-              <p className="text-red-600">{error}</p>
+        <div className="flex justify-center items-center min-h-64">
+          <div className="text-center max-w-md">
+            <div className="bg-red-50 border border-red-200 p-6 rounded-lg mb-6">
+              <div className="flex items-center justify-center mb-4">
+                <div className="bg-red-100 p-3 rounded-full">
+                  <svg className="h-6 w-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                  </svg>
+                </div>
+              </div>
+              <h3 className="text-lg font-semibold text-red-800 mb-2">Error en el Dashboard</h3>
+              <p className="text-red-700 mb-4">{error}</p>
+              
+              {/* Información adicional de diagnóstico */}
+              <div className="bg-red-100 p-3 rounded text-sm text-red-600 mb-4">
+                <p className="font-medium mb-1">Información de diagnóstico:</p>
+                <p>• URL de API: {process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}</p>
+                <p>• Timestamp: {new Date().toLocaleString()}</p>
+              </div>
             </div>
-            <Button onClick={cargarDatosDashboard} variant="outline">
-              Reintentar
-            </Button>
+            
+            <div className="space-y-3">
+              <Button onClick={cargarDatosDashboard} variant="outline" className="w-full">
+                🔄 Reintentar
+              </Button>
+              
+              <div className="flex space-x-2">
+                <Button 
+                  onClick={() => window.location.reload()} 
+                  variant="outline" 
+                  size="sm"
+                  className="flex-1"
+                >
+                  🔄 Recargar página
+                </Button>
+                <Button 
+                  onClick={() => window.location.href = '/auth/login'} 
+                  variant="outline" 
+                  size="sm"
+                  className="flex-1"
+                >
+                  🔐 Ir a login
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
       </div>

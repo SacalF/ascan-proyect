@@ -122,7 +122,7 @@ export default function ConsultaPage(): ReactElement {
           <CardContent className="pt-6 text-center">
             <div className="text-green-600 mb-4">
               <Save className="h-12 w-12 mx-auto" />
-            </div>
+        </div>
             <h2 className="text-xl font-semibold mb-2">Consulta creada exitosamente</h2>
             <p className="text-muted-foreground">Redirigiendo...</p>
           </CardContent>
@@ -140,12 +140,12 @@ export default function ConsultaPage(): ReactElement {
             onClick={() => router.back()}
             className="mb-4"
           >
-            <ArrowLeft className="h-4 w-4 mr-2" />
+                  <ArrowLeft className="h-4 w-4 mr-2" />
             Volver
-          </Button>
+              </Button>
           <h1 className="text-3xl font-bold text-gray-900">Nueva Consulta Médica</h1>
           <p className="text-gray-600 mt-2">Registre los detalles de la consulta del paciente</p>
-        </div>
+                </div>
 
         {error && (
           <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
@@ -186,13 +186,13 @@ export default function ConsultaPage(): ReactElement {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <Label htmlFor="fecha">Fecha de Consulta</Label>
-                      <Input
-                        id="fecha"
-                        type="date"
-                        value={formData.fecha}
-                        onChange={(e) => handleInputChange("fecha", e.target.value)}
+                        <Input
+                          id="fecha"
+                          type="date"
+                          value={formData.fecha}
+                          onChange={(e) => handleInputChange("fecha", e.target.value)}
                         required
-                      />
+                        />
                     </div>
                   </div>
 
@@ -234,53 +234,53 @@ export default function ConsultaPage(): ReactElement {
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     <div>
                       <Label htmlFor="peso">Peso (kg)</Label>
-                      <Input
-                        id="peso"
-                        type="number"
-                        step="0.1"
-                        value={formData.peso}
-                        onChange={(e) => handleInputChange("peso", e.target.value)}
+                        <Input
+                          id="peso"
+                          type="number"
+                          step="0.1"
+                          value={formData.peso}
+                          onChange={(e) => handleInputChange("peso", e.target.value)}
                         placeholder="70.5"
-                      />
-                    </div>
+                        />
+                      </div>
                     <div>
                       <Label htmlFor="talla">Talla (cm)</Label>
-                      <Input
-                        id="talla"
-                        type="number"
-                        value={formData.talla}
-                        onChange={(e) => handleInputChange("talla", e.target.value)}
+                        <Input
+                          id="talla"
+                          type="number"
+                          value={formData.talla}
+                          onChange={(e) => handleInputChange("talla", e.target.value)}
                         placeholder="170"
-                      />
-                    </div>
+                        />
+                      </div>
                     <div>
                       <Label htmlFor="pulso">Pulso (bpm)</Label>
-                      <Input
-                        id="pulso"
-                        type="number"
-                        value={formData.pulso}
-                        onChange={(e) => handleInputChange("pulso", e.target.value)}
+                        <Input
+                          id="pulso"
+                          type="number"
+                          value={formData.pulso}
+                          onChange={(e) => handleInputChange("pulso", e.target.value)}
                         placeholder="72"
-                      />
-                    </div>
+                        />
+                      </div>
                     <div>
-                      <Label htmlFor="presion_arterial">Presión Arterial</Label>
-                      <Input
-                        id="presion_arterial"
-                        value={formData.presion_arterial}
-                        onChange={(e) => handleInputChange("presion_arterial", e.target.value)}
+                        <Label htmlFor="presion_arterial">Presión Arterial</Label>
+                        <Input
+                          id="presion_arterial"
+                          value={formData.presion_arterial}
+                          onChange={(e) => handleInputChange("presion_arterial", e.target.value)}
                         placeholder="120/80"
-                      />
-                    </div>
+                        />
+                      </div>
                   </div>
                   <div>
                     <Label htmlFor="temperatura">Temperatura (°C)</Label>
-                    <Input
-                      id="temperatura"
-                      type="number"
-                      step="0.1"
-                      value={formData.temperatura}
-                      onChange={(e) => handleInputChange("temperatura", e.target.value)}
+                        <Input
+                          id="temperatura"
+                          type="number"
+                          step="0.1"
+                          value={formData.temperatura}
+                          onChange={(e) => handleInputChange("temperatura", e.target.value)}
                       placeholder="36.5"
                     />
                   </div>
@@ -303,20 +303,20 @@ export default function ConsultaPage(): ReactElement {
                         <Eye className="h-4 w-4" />
                         Cabeza y Ojos
                       </Label>
-                      <Textarea
-                        id="cabeza_ojos"
-                        value={formData.cabeza_ojos}
-                        onChange={(e) => handleInputChange("cabeza_ojos", e.target.value)}
+                        <Textarea
+                          id="cabeza_ojos"
+                          value={formData.cabeza_ojos}
+                          onChange={(e) => handleInputChange("cabeza_ojos", e.target.value)}
                         placeholder="Estado de la cabeza y ojos..."
                         rows={2}
-                      />
-                    </div>
+                        />
+                      </div>
                     <div>
                       <Label htmlFor="nariz_oidos" className="flex items-center gap-2">
                         <Ear className="h-4 w-4" />
                         Nariz y Oídos
                       </Label>
-                      <Textarea
+                        <Textarea
                         id="nariz_oidos"
                         value={formData.nariz_oidos}
                         onChange={(e) => handleInputChange("nariz_oidos", e.target.value)}
@@ -329,7 +329,7 @@ export default function ConsultaPage(): ReactElement {
                         <Smile className="h-4 w-4" />
                         Boca y Garganta
                       </Label>
-                      <Textarea
+                        <Textarea
                         id="boca_garganta"
                         value={formData.boca_garganta}
                         onChange={(e) => handleInputChange("boca_garganta", e.target.value)}
@@ -349,7 +349,7 @@ export default function ConsultaPage(): ReactElement {
                     </div>
                     <div>
                       <Label htmlFor="torax">Tórax</Label>
-                      <Textarea
+                        <Textarea
                         id="torax"
                         value={formData.torax}
                         onChange={(e) => handleInputChange("torax", e.target.value)}
@@ -359,7 +359,7 @@ export default function ConsultaPage(): ReactElement {
                     </div>
                     <div>
                       <Label htmlFor="abdomen">Abdomen</Label>
-                      <Textarea
+                        <Textarea
                         id="abdomen"
                         value={formData.abdomen}
                         onChange={(e) => handleInputChange("abdomen", e.target.value)}
